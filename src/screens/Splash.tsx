@@ -45,7 +45,7 @@ const Splash = ({ setIsLoading }: SplashProps): JSX.Element => {
       <StyledView className={'flex-1 align-center justify-center m-0'}>
         <StyledLottieView
           className={'flex-1'}
-          source={require('../assets/Flow 1 (1).json')}
+          source={require('../../assets/Flow 1.json')}
           autoPlay
           loop={false}
           resizeMode={'cover'}
