@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction, useRef } from "react";
 import { Animated, View, Text, StyleSheet } from "react-native";
 import LottieView from 'lottie-react-native';
 import { styled } from "nativewind";
@@ -8,40 +8,42 @@ const StyledLottieView = styled(LottieView);
 const StyledText = styled(Text);
 
 interface SplashProps {
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setScreen: Dispatch<SetStateAction<number>>;
 }
 
-const Splash = ({ setIsLoading }: SplashProps): JSX.Element => {
-  const [fadeAnim] = useState(new Animated.Value(1));
+const Splash = ({ setScreen }: SplashProps): JSX.Element => {
+  const colorAnim = useRef(new Animated.Value(1)).current; // Start with blue color
   const [greeting, setGreeting] = useState('');
 
   useEffect(() => {
+    // Determine the greeting based on the time of day
     const now = new Date();
     const hours = now.getHours();
 
-    if (hours < 12) {
-      setGreeting('Доброе утро!');
-    } else if (hours < 20) {
-      setGreeting("Хорошего дня!");
+    if (hours < 6) {
+      setGreeting('Спокойной ночи'); // Good night
+    } else if (hours < 12) {
+      setGreeting('Доброе утро!'); // Good morning
+    } else if (hours < 18) {
+      setGreeting('Хорошего дня!'); // Good day
     } else {
-      setGreeting('Спокойной ночи');
+      setGreeting('Доброй ночи!'); // Good evening
     }
 
+
+    // Transition to the next screen after 6 seconds
     const timer = setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start(() => {
-        setIsLoading(false);
-      });
+      setScreen(2); // Transition to the second Splash screen
     }, 6000);
 
     return () => clearTimeout(timer);
-  }, [fadeAnim, setIsLoading]);
+  }, [setScreen]);
+
+  // Set the background color to blue
+  const backgroundColor = '#0000ff';
 
   return (
-    <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+    <Animated.View style={{ flex: 1, backgroundColor }}>
       <StyledView className={'flex-1 align-center justify-center m-0'}>
         <StyledLottieView
           className={'flex-1'}
