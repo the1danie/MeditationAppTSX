@@ -3,6 +3,7 @@ import { Animated, View, Text, StyleSheet } from "react-native";
 import LottieView from 'lottie-react-native';
 import { styled } from "nativewind";
 
+
 const StyledView = styled(View);
 const StyledLottieView = styled(LottieView);
 const StyledText = styled(Text);

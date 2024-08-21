@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { styled } from 'nativewind';
 import Home from "./src/screens/Home.tsx";
 import Splash from "./src/screens/Splash.tsx";
-import Splash2 from './src/screens/Splash_Second.tsx';
+import Splash2 from './src/screens/Splash_Second.tsx'
 
 const App = () => {
   const [screen, setScreen] = useState(1); // 1 для Splash, 2 для Splash2, 3 для Home
