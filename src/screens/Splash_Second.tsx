@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, View, Text, StyleSheet } from "react-native";
 import LottieView from 'lottie-react-native';
-import axios from 'axios';
 import { styled } from "nativewind";
+import quotes from '../../assets/sortedQuotes.json'; // Импортируем из файла
 
 const StyledView = styled(View);
 const StyledLottieView = styled(LottieView);
@@ -15,43 +15,15 @@ interface Splash2Props {
 const Splash2 = ({ setScreen }: Splash2Props): JSX.Element => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [quote, setQuote] = useState<{ text: string, author: string } | null>(null);
-  const backgroundColor = '#0000ff'; // Background color is blue
 
   useEffect(() => {
-    // Fetch a random Russian quote from an API
-    const fetchQuote = async () => {
-      try {
-        const response = await axios.get('https://quotes15.p.rapidapi.com/quotes/random/?language_code=ru', {
-          headers: {
-            'x-rapidapi-key': 'a3cf6dc5bcmsh01bdcc01191b96dp1ffb80jsnf5cc44fd7302',
-            'x-rapidapi-host': 'quotes15.p.rapidapi.com'
-          }
-        });
-
-        const { content, originator } = response.data;
-
-        // Limit quote text to 15 words
-        const limitWords = (text: string, maxWords: number) => {
-          const words = text.split(' ');
-          if (words.length > maxWords) {
-            return words.slice(0, maxWords).join(' ') + '...';
-          }
-          return text;
-        };
-
-        setQuote({
-          text: limitWords(content, 10),
-          author: originator.name
-        });
-      } catch (error) {
-        console.error('Error fetching quote:', error);
-        setQuote({ text: 'Ошибка при загрузке цитаты', author: '' }); // Fallback message
-      }
+    const getRandomQuote = () => {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      return quotes[randomIndex];
     };
 
-    fetchQuote();
-
-    // Fade-in animation for the content
+    // Select a new random quote each time the component mounts
+    setQuote(getRandomQuote());
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 0,
@@ -73,7 +45,7 @@ const Splash2 = ({ setScreen }: Splash2Props): JSX.Element => {
   }, [fadeAnim, setScreen]);
 
   return (
-    <Animated.View style={{ flex: 1, backgroundColor, opacity: fadeAnim }}>
+    <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
       <StyledView className={'flex-1 align-center justify-center m-0'}>
         <StyledLottieView
           className={'flex-1'}
